@@ -3,6 +3,7 @@ import React from 'react';
 
 class App extends Component{
   state = {
+    counter: 0,
       posts: [
         {
           id: 1,
@@ -21,11 +22,36 @@ class App extends Component{
         },
       ]
     }
+
+    timeOutUpdate = null;
+
+    componentDidMount() {
+      this.handleTimeOut();
+    }
+
+    componentDidUpdate() {
+      this.handleTimeOut();
+    }
+
+    componentWillUnmount() {
+      clearTimeout(this.timeOutUpdate);
+    }
+
+    handleTimeOut = () => {
+      const { posts, counter} = this.state;
+      posts[0].title = "O titulo mudou";
+      this.timeOutUpdate = setTimeout(() => {
+        this.setState({
+          posts, counter: counter + 1
+        })
+      }, 2000);
+    }
   render(){
-    const { posts } = this.state;
+    const { posts, counter } = this.state;
 
     return (
       <div className="App">
+        {counter}
         {posts.map( post => (
           <div className='cardBody' key={post.id}>
             <h1 className='titleBody'>{post.title}</h1>
